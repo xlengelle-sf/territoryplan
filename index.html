@@ -111,6 +111,9 @@
   section { padding: 130px 0; position: relative; }
   section.tight { padding: 90px 0; }
   section.light { background: #fbfbfd; color: var(--ink); }
+  /* LVMH : la vidéo est collée au noir de la section précédente ; le titre respire en dessous */
+  section.light#lvmh { padding-top: 0; }
+  section.light#lvmh > .wrap { padding-top: 96px; }
   section.light .eyebrow { color: var(--blue-light); }
   section.light .grey { color: var(--ink-grey); }
 
@@ -587,8 +590,7 @@ function render() {
       ${videoHero("assets/adoption.mp4", "off")}
       <div class="wrap">
         <div class="chapter-head center narrow">
-          <div class="eyebrow reveal">Preuve en production · LVMH</div>
-          <h2 class="big reveal" style="transition-delay:.05s">L'adoption, déjà réelle.</h2>
+          <h2 class="big reveal">L'adoption, déjà réelle.</h2>
           <p class="lede grey reveal" style="transition-delay:.1s">Trois use cases agentiques suivis chez LVMH, de juin à décembre 2026. La traction terrain est le meilleur argument pour amorcer le renew Core.</p>
         </div>
         <div class="adopt reveal">${adopt}</div>
