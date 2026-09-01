@@ -198,6 +198,13 @@
 
   /* ============ BETS ============ */
   .bets { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .bets-total {
+    margin-top: 20px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    padding: 24px 40px; background: var(--panel); border-radius: var(--r-lg);
+  }
+  .bets-total .bt-lbl { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .bets-total .bt-hint { color: var(--grey); font-weight: 400; }
+  .bets-total .bt-val { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--blue); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .bet {
     background: var(--panel); border-radius: var(--r-lg); padding: 40px;
     transition: transform 0.5s var(--ease), background 0.5s var(--ease);
@@ -281,6 +288,10 @@
   .pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 5px 11px; border-radius: 980px; white-space: nowrap; background: rgba(255,255,255,0.06); color: var(--grey); }
   .pill.s4 { color: var(--green); background: rgba(48,209,88,0.12); }
   .pill.s3 { color: var(--blue); background: rgba(41,151,255,0.12); }
+  tfoot .total-row td { padding: 20px 24px; border-top: 1px solid var(--hair); background: rgba(255,255,255,0.03); vertical-align: middle; }
+  tfoot .total-row td:first-child { font-weight: 600; letter-spacing: -0.01em; }
+  tfoot .total-row .sub { margin-top: 2px; font-weight: 400; }
+  tfoot .total-row td.amt { color: var(--blue); font-size: 17px; font-weight: 600; }
 
   /* watch */
   .watch { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
@@ -344,6 +355,7 @@
     .fig { border-right: none; border-bottom: 1px solid var(--hair); padding: 26px 16px; }
     .watch { grid-template-columns: 1fr 1fr; }
     .adopt-row { grid-template-columns: 1fr; gap: 20px; }
+    .bets-total { flex-direction: column; align-items: flex-start; gap: 8px; padding: 24px 28px; }
     .nav-links { display: none; }
     .split { gap: 40px; }
     .hero { gap: 48px; }
@@ -421,16 +433,12 @@ const DATA = {
     { useCase: "Writing Assistant", deployJun: 20, deployDec: 530, advisorsStart: "1% · 2 maisons", advisorsEnd: "15% · 7 maisons", adoptionStartPct: 75, adoptionEndPct: 75, note: "Déploiement x26 ; adoption déjà élevée et stable." },
     { useCase: "Knowledge Search Agent", deployJun: 40, deployDec: 550, advisorsStart: "1% · 2 maisons", advisorsEnd: "15% · 4 maisons", adoptionStartPct: 65, adoptionEndPct: 65, note: "Scale rapide du déploiement ; adoption stable." }
   ],
+  // Pipe hors 6 bets : les comptes déjà présents dans les blocs focus du haut
+  // (Royal Canin, Mousquetaires, Roullier, Chanel, Coop U) sont retirés pour éviter le double compte.
   fullPipe: [
-    { account: "Royal Canin (Mars)", oppty: "RC - EOS - AI - AELA", stage: "04 - Confirming Value With Power", amount: "1 048 179 $", closeDate: "13 janv.", nextStep: "Quantifier l'UC, démarrer les discussions AELA, appui Dreamforce." },
-    { account: "Mousquetaires", oppty: "Mousquetaires - RFI IA", stage: "03 - Validating Benefits & Value", amount: "931 715 $", closeDate: "29 janv.", nextStep: "Restitution RFI IA le 09/10 ; SIC business + CxO G. Lesouef." },
     { account: "Bel (Unibel)", oppty: "BEL - AF for Sales (OOH, Retail, GMS)", stage: "04 - Confirming Value With Power", amount: "780 311 $", closeDate: "15 janv.", nextStep: "S'appuyer sur le pilote AF for Service pour étendre à Sales." },
-    { account: "Roullier (Timac)", oppty: "Timac - Sales Efficiency - AF Sales + D360", stage: "04 - Confirming Value With Power", amount: "648 706 $", closeDate: "15 janv.", nextStep: "Le pilote doit démontrer l'impact AF avant déploiement 5000 users." },
     { account: "Pernod Ricard", oppty: "PL - AF for Operation (Regrello)", stage: "02 - Determining Problem", amount: "582 322 $", closeDate: "29 janv.", nextStep: "Pas de nouvelles depuis 16/07, prochaine étape en octobre." },
-    { account: "Royal Canin - Upside", oppty: "RC - EOS - AI - AELA - Upside", stage: "04 - Confirming Value With Power", amount: "582 322 $", closeDate: "26 janv.", nextStep: "Démarrage des discussions AELA, appui Dreamforce." },
-    { account: "Chanel", oppty: "Agentic Acceleration - AF/DC #Ambition", stage: "02 - Determining Problem", amount: "525 000 $", closeDate: "30 déc.", nextStep: "Stream hebdo AI EU, POC KO Clienteling & W&FJ mi-septembre." },
     { account: "Carrefour Hyper.", oppty: "CRF-RFP-CDP", stage: "02 - Determining Problem", amount: "500 000 $", closeDate: "27 nov.", nextStep: "Contribuer au RFP avec la Core Team, réponse le 7 septembre." },
-    { account: "Coop U", oppty: "Parcours E-Com & Service (Ambition)", stage: "03 - Validating Benefits & Value", amount: "442 564 $", closeDate: "11 déc.", nextStep: "Intégrer le Commerce Agentic à la modernisation CSG (Phase 2)." },
     { account: "Kering", oppty: "Ambition AF Agent FAQ All-brands", stage: "04 - Confirming Value With Power", amount: "349 393 $", closeDate: "29 janv.", nextStep: "Go-live mi-septembre ; corrections de bugs en cours." },
     { account: "Longchamp", oppty: "Longchamp - Data 360 (BDR)", stage: "04 - Confirming Value With Power", amount: "221 282 $", closeDate: "11 janv.", nextStep: "Débrief de juillet à venir ; démo faite le 29/06." }
   ],
@@ -496,6 +504,20 @@ function videoHero(src, sound) {
 function render() {
   const d = DATA;
   const heroPct = Math.round((1.8 / 4.225) * 100);
+
+  // iACV cumulée des 6 bets : on normalise en k€ et on prend le downside sur les fourchettes
+  const iacvToK = s => {
+    const isM = /m\s*€|m\s*eur/i.test(s);
+    const nums = (String(s).match(/\d+(?:[.,]\d+)?/g) || []).map(n => parseFloat(n.replace(",", ".")));
+    if (!nums.length) return 0;
+    return Math.min(...nums) * (isM ? 1000 : 1); // downside sur une fourchette
+  };
+  const betsTotalK = d.bets.reduce((sum, b) => sum + iacvToK(b.iacvTarget), 0);
+  const betsTotalFmt = (betsTotalK / 1000).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " m€";
+
+  // Total du pipe hors 6 bets (montants en $, pas de fourchette ici)
+  const amtToNum = s => Number(String(s).replace(/[^\d]/g, "")) || 0;
+  const pipeTotalFmt = d.fullPipe.reduce((sum, p) => sum + amtToNum(p.amount), 0).toLocaleString("fr-FR") + " $";
 
   const figs = d.quotaTiles.map(t =>
     `<div class="fig ${t.accent ? 'accent' : ''}"><div class="v"><span class="cnt" data-target="${t.v}" data-dec="${(t.v % 1 !== 0) ? String(t.v).split('.')[1].length : 0}">0</span><span class="u">${t.u}</span></div><div class="k">${t.k}</div></div>`
@@ -598,6 +620,10 @@ function render() {
           <p class="lede grey reveal" style="transition-delay:.1s">Le use case est validé côté métier partout. La barre indique l'avancement de chaque deal vers la signature.</p>
         </div>
         <div class="bets">${bets}</div>
+        <div class="bets-total reveal">
+          <span class="bt-lbl">iACV cible cumulée <span class="bt-hint">· downside des fourchettes</span></span>
+          <span class="bt-val">${betsTotalFmt}</span>
+        </div>
       </div>
     </section>
 
@@ -624,12 +650,13 @@ function render() {
         <div class="chapter-head center narrow">
           <div class="eyebrow reveal">Pipe complet Org62</div>
           <h2 class="big reveal" style="transition-delay:.05s">Au-delà des 6 bets.</h2>
-          <p class="lede grey reveal" style="transition-delay:.1s">Toutes les opportunités Agentforce supérieures à 200k€.</p>
+          <p class="lede grey reveal" style="transition-delay:.1s">Les opportunités Agentforce &gt; 200k€ hors 6 bets, pour éviter le double compte.</p>
         </div>
         <div class="panel reveal">
           <table>
             <thead><tr><th>Compte / Opportunité</th><th>Stage</th><th style="text-align:right">Montant</th><th style="text-align:right">Close</th><th>Next step</th></tr></thead>
             <tbody>${pipeRows}</tbody>
+            <tfoot><tr class="total-row"><td>Total pipe hors 6 bets<div class="sub">${d.fullPipe.length} opportunités</div></td><td></td><td class="amt">${pipeTotalFmt}</td><td></td><td></td></tr></tfoot>
           </table>
         </div>
         <div class="center reveal" style="margin-top:72px"><div class="subhead">Watch list · 100 à 200k€</div></div>
