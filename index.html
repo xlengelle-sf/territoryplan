@@ -251,6 +251,21 @@
   .lbar > i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--blue-light); transition: width 1.4s var(--ease); }
   .adopt-advisors { color: var(--ink-grey); font-size: 13px; margin-top: 10px; }
 
+  /* CTA plan d'accélération (section claire) */
+  .plan-cta { margin-top: 48px; text-align: center; }
+  .plan-note { color: var(--ink-grey); font-size: clamp(16px, 2vw, 19px); letter-spacing: -0.01em; margin-bottom: 20px; }
+  .plan-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue-light); color: #fff; text-decoration: none;
+    font-weight: 500; font-size: 17px; letter-spacing: -0.01em;
+    padding: 14px 26px; border-radius: 980px;
+    transition: transform 0.15s var(--ease), background 0.25s;
+  }
+  .plan-link:hover { background: #0a84ff; }
+  .plan-link:active { transform: scale(0.97); }
+  .plan-link svg { transition: transform 0.2s var(--ease); }
+  .plan-link:hover svg { transform: translate(2px, -2px); }
+
   /* ============ TABLE ============ */
   .panel { background: var(--panel); border-radius: var(--r-lg); overflow: hidden; }
   table { width: 100%; border-collapse: collapse; font-size: 15px; }
@@ -594,6 +609,13 @@ function render() {
           <p class="lede grey reveal" style="transition-delay:.1s">Trois use cases agentiques suivis chez LVMH, de juin à décembre 2026. La traction terrain est le meilleur argument pour amorcer le renew Core.</p>
         </div>
         <div class="adopt reveal">${adopt}</div>
+        <div class="plan-cta reveal">
+          <p class="plan-note">Un plan d'accélération dédié est en construction, et déjà en cours de déroulé.</p>
+          <a class="plan-link" href="https://docs.google.com/presentation/d/1bMTt5gikfF_pwxVIcaWu7g-zsqodx7rcd2_X3Ft6YUg/edit?slide=id.g3f58fd31627_0_4220#slide=id.g3f58fd31627_0_4220" target="_blank" rel="noopener noreferrer">
+            Voir le plan d'accélération
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+          </a>
+        </div>
       </div>
     </section>
 
