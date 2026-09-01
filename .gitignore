@@ -1,0 +1,8 @@
+# QA artifacts
+.playwright-mcp/
+.claude/
+*.png
+
+# Confidential source content — must NOT be served publicly (data is inline in index.html)
+assets/synthesis.json
+assets/verify.json

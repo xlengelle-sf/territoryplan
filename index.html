@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FY27 H2 · ACO Big Bets</title>
+<style>
+  /* ============================================================
+     Langage visuel : Apple / iPad Pro keynote.
+     SF Pro (stack système Apple, rendu natif sur macOS).
+     Noir #000 dominant, une respiration blanche (adoption LVMH).
+     Couleurs = système Apple. Reveal scroll = fade + scale + blur.
+     ============================================================ */
+  :root {
+    --black: #000000;
+    --panel: #131316;      /* tuile sombre élevée */
+    --panel-2: #1c1c1e;    /* tuile sur tuile */
+    --hair: rgba(255, 255, 255, 0.10);
+    --hair-soft: rgba(255, 255, 255, 0.06);
+    --white: #f5f5f7;      /* texte sur noir */
+    --grey: #86868b;       /* gris Apple */
+    --grey-2: #6e6e73;
+    --ink: #1d1d1f;        /* texte sur blanc */
+    --ink-grey: #6e6e73;
+    --blue: #2997ff;       /* bleu Apple sombre */
+    --blue-light: #0071e3; /* bleu Apple clair (sections blanches) */
+    --green: #30d158;
+    --amber: #ff9f0a;
+    --red: #ff453a;
+    --r: 22px;
+    --r-lg: 30px;
+    --maxw: 1080px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 56px; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 17px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  body.locked { overflow: hidden; height: 100vh; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; position: relative; }
+  .narrow { max-width: 820px; }
+  .center { text-align: center; margin-left: auto; margin-right: auto; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ============ GATE ============ */
+  .gate {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    background: #000; padding: 24px;
+    transition: opacity 0.8s var(--ease), visibility 0.8s;
+  }
+  .gate.open { opacity: 0; visibility: hidden; }
+  .gate-card { width: 100%; max-width: 400px; text-align: center; animation: fadeUp 0.9s var(--ease) both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .gate-eyebrow { color: var(--blue); font-size: 15px; font-weight: 600; letter-spacing: 0.01em; margin-bottom: 10px; }
+  .gate-card h1 { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 32px; }
+  .gate-input {
+    width: 100%; background: #1c1c1e; border: 1px solid transparent; border-radius: 14px;
+    color: var(--white); font-family: var(--font); font-size: 17px; padding: 15px 18px; text-align: center;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .gate-input::placeholder { color: var(--grey-2); }
+  .gate-input:focus { outline: none; border-color: var(--blue); background: #202024; }
+  .gate-btn {
+    width: 100%; margin-top: 12px; background: var(--blue); color: #fff; border: none; border-radius: 980px;
+    font-family: var(--font); font-weight: 500; font-size: 17px; padding: 15px; cursor: pointer;
+    transition: transform 0.15s var(--ease), background 0.25s;
+  }
+  .gate-btn:hover { background: #3aa0ff; }
+  .gate-btn:active { transform: scale(0.97); }
+  .gate-err { color: var(--red); font-size: 14px; margin-top: 16px; min-height: 18px; opacity: 0; transition: opacity 0.2s; }
+  .gate-err.show { opacity: 1; }
+  .gate-hint { color: var(--grey-2); font-size: 13px; margin-top: 28px; }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 40; height: 52px;
+    display: flex; align-items: center;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--hair-soft);
+    opacity: 0; transform: translateY(-100%);
+    transition: transform 0.6s var(--ease), opacity 0.6s;
+  }
+  nav.show { transform: none; opacity: 1; }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 32px; max-width: 1280px; }
+  .nav-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 9px; }
+  .nav-brand .glyph { color: var(--grey); font-weight: 400; }
+  .nav-links { display: flex; gap: 2px; }
+  .nav-links a {
+    color: var(--grey); text-decoration: none; font-size: 13px; font-weight: 400;
+    padding: 6px 12px; border-radius: 980px; transition: color 0.25s, background 0.25s; white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a.active { color: var(--white); background: rgba(255, 255, 255, 0.08); }
+
+  /* ============ SECTIONS ============ */
+  section { padding: 130px 0; position: relative; }
+  section.tight { padding: 90px 0; }
+  section.light { background: #fbfbfd; color: var(--ink); }
+  section.light .eyebrow { color: var(--blue-light); }
+  section.light .grey { color: var(--ink-grey); }
+
+  .eyebrow { color: var(--blue); font-size: 19px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .grey { color: var(--grey); }
+
+  h2.big { font-size: clamp(38px, 6vw, 72px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.03; }
+  .lede { font-size: clamp(19px, 2.4vw, 26px); font-weight: 400; letter-spacing: -0.015em; line-height: 1.35; margin-top: 18px; }
+  .chapter-head { margin-bottom: 72px; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(44px) scale(0.965); filter: blur(8px); transition: opacity 1s var(--ease), transform 1s var(--ease), filter 1s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; filter: none; }
+
+  /* ============ HERO ============ */
+  .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 0 72px; gap: 60px; }
+  .hero .eyebrow { font-size: 21px; }
+  .hero h1 {
+    font-size: clamp(52px, 10vw, 128px); font-weight: 600; letter-spacing: -0.045em; line-height: 0.95;
+    margin: 6px 0 0;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(180deg, #ffffff 0%, #b0b0b8 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  }
+  /* Placeholder pleine largeur pour le futur visuel Higgsfield */
+  .hero-visual {
+    width: 100%; aspect-ratio: 16 / 6; position: relative; overflow: hidden;
+    display: grid; place-items: center;
+    border-bottom: 1px solid var(--hair-soft);
+    background:
+      radial-gradient(65% 130% at 50% 0%, rgba(41, 151, 255, 0.10), transparent 70%),
+      linear-gradient(135deg, #0a0a0c 0%, #131316 55%, #0a0a0c 100%);
+    background-size: cover; background-position: center; /* prêt pour background-image */
+  }
+  .hero-visual .hv-img,
+  .hero-visual .hv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Contrôles vidéo : overlay givré, même opacité que la nav, calé en bas de la vidéo */
+  .hero-controls {
+    position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 5;
+    display: flex; align-items: center; gap: 4px; padding: 5px;
+    background: rgba(0, 0, 0, 0.60);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 1px solid var(--hair-soft); border-radius: 980px;
+    opacity: 0; transition: opacity 0.6s var(--ease) 0.4s;
+  }
+  .hero-visual.in .hero-controls { opacity: 1; }
+  .hc-btn {
+    display: grid; place-items: center; width: 34px; height: 34px; padding: 0;
+    background: transparent; border: none; border-radius: 980px; cursor: pointer;
+    color: rgba(255, 255, 255, 0.82); transition: color 0.2s, background 0.2s, transform 0.1s;
+  }
+  .hc-btn svg { fill: currentColor; }
+  .hc-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.10); }
+  .hc-btn:active { transform: scale(0.92); }
+  .hero-visual .hv-hint {
+    color: var(--grey-2); font-size: 14px; letter-spacing: 0.02em;
+    padding: 11px 20px; border: 1px dashed var(--hair); border-radius: 980px;
+    background: rgba(0, 0, 0, 0.28);
+  }
+
+  /* ============ BIG NUMBER MOMENT ============ */
+  .huge {
+    font-size: clamp(96px, 20vw, 240px); font-weight: 600; letter-spacing: -0.05em; line-height: 0.85;
+    background: linear-gradient(180deg, #ffffff 0%, #9a9aa2 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .huge .pct { font-size: 0.42em; letter-spacing: -0.03em; }
+  .quota-line { max-width: 620px; margin: 44px auto 0; }
+  .qbar-track { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+  .qbar-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--blue-light), var(--blue)); transition: width 1.6s var(--ease); }
+  .qbar-legend { display: flex; justify-content: space-between; margin-top: 12px; color: var(--grey); font-size: 14px; }
+
+  .figrow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 80px; border-top: 1px solid var(--hair); }
+  .fig { padding: 30px 20px 0; border-right: 1px solid var(--hair); text-align: center; }
+  .fig:last-child { border-right: none; }
+  .fig .v { font-size: 34px; font-weight: 600; letter-spacing: -0.03em; }
+  .fig .v .u { font-size: 17px; color: var(--grey); font-weight: 400; margin-left: 2px; }
+  .fig.accent .v { color: var(--blue); }
+  .fig .k { color: var(--grey); font-size: 14px; margin-top: 8px; }
+
+  /* ============ BETS ============ */
+  .bets { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .bet {
+    background: var(--panel); border-radius: var(--r-lg); padding: 40px;
+    transition: transform 0.5s var(--ease), background 0.5s var(--ease);
+  }
+  .bet:hover { transform: translateY(-4px); background: #17171b; }
+  .bet-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .bet-name { font-size: 30px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; }
+  .bet-entity { color: var(--grey); font-size: 14px; margin-top: 6px; }
+  .sig { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; white-space: nowrap; flex: none; padding-top: 6px; }
+  .sig .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .sig[data-c="green"] { color: var(--green); } .sig[data-c="green"] .dot { background: var(--green); box-shadow: 0 0 12px rgba(48,209,88,0.5); }
+  .sig[data-c="amber"] { color: var(--amber); } .sig[data-c="amber"] .dot { background: var(--amber); box-shadow: 0 0 12px rgba(255,159,10,0.5); }
+  .sig[data-c="red"]   { color: var(--red); }   .sig[data-c="red"] .dot   { background: var(--red);   box-shadow: 0 0 12px rgba(255,69,58,0.5); }
+  .bet-uc { color: var(--grey); font-size: 16px; line-height: 1.5; margin: 22px 0 26px; }
+
+  .bet-prog { margin-bottom: 26px; }
+  .bet-prog .head { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--grey); margin-bottom: 10px; }
+  .bet-prog .head b { color: var(--white); font-weight: 500; }
+  .pbar { height: 5px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden; }
+  .pbar > i { display: block; height: 100%; width: 0; border-radius: 999px; transition: width 1.3s var(--ease); }
+  .pbar[data-c="green"] > i { background: var(--green); }
+  .pbar[data-c="amber"] > i { background: var(--amber); }
+  .pbar[data-c="red"]   > i { background: var(--red); }
+  /* Bets : barres en nuances de bleu Salesforce (charte SF) */
+  .bet-prog .pbar > i { background: linear-gradient(90deg, #0176d3, var(--blue)); }
+
+  .bet-figs { display: flex; gap: 32px; flex-wrap: wrap; padding: 24px 0; border-top: 1px solid var(--hair-soft); border-bottom: 1px solid var(--hair-soft); margin-bottom: 24px; }
+  .bet-figs .cell .k { color: var(--grey); font-size: 12px; }
+  .bet-figs .cell .v { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-top: 4px; }
+  .bet-figs .cell.big .v { color: var(--blue); font-size: 26px; }
+
+  .bet-block + .bet-block { margin-top: 22px; }
+  .bet-block .lbl { color: var(--grey-2); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 12px; }
+  .bet-block ul { list-style: none; display: grid; gap: 10px; }
+  .bet-block li { font-size: 15px; line-height: 1.45; padding-left: 22px; position: relative; color: var(--white); }
+  .bet-block li::before { content: ""; position: absolute; left: 4px; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+  .bet-block.flags li { color: var(--grey); }
+  .bet-block.flags li::before { background: var(--grey-2); }
+
+  /* ============ LVMH (light) ============ */
+  .adopt { display: grid; gap: 0; border-top: 1px solid rgba(0,0,0,0.1); }
+  .adopt-row { display: grid; grid-template-columns: 1.2fr 1fr 1.5fr; gap: 40px; align-items: center; padding: 40px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+  .adopt-uc { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+  .adopt-note { color: var(--ink-grey); font-size: 15px; margin-top: 6px; }
+  .adopt-cap { color: var(--ink-grey); font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .adopt-deploy .big { font-size: 52px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+  .adopt-deploy .from { color: var(--ink-grey); font-size: 15px; margin-top: 6px; }
+  .adopt-adopt .cap-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .adopt-adopt .cap-row b { font-size: 17px; font-weight: 600; color: var(--blue-light); }
+  .lbar { height: 6px; border-radius: 999px; background: rgba(0,0,0,0.08); overflow: hidden; }
+  .lbar > i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--blue-light); transition: width 1.4s var(--ease); }
+  .adopt-advisors { color: var(--ink-grey); font-size: 13px; margin-top: 10px; }
+
+  /* ============ TABLE ============ */
+  .panel { background: var(--panel); border-radius: var(--r-lg); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  thead th { text-align: left; color: var(--grey); font-weight: 500; font-size: 13px; padding: 20px 24px; border-bottom: 1px solid var(--hair); }
+  tbody td { padding: 20px 24px; border-bottom: 1px solid var(--hair-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr { transition: background 0.2s; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  td.amt { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; font-weight: 500; }
+  .acc { font-weight: 600; letter-spacing: -0.01em; }
+  .sub { color: var(--grey); font-size: 13px; margin-top: 4px; }
+  .next { color: var(--grey); font-size: 13px; max-width: 300px; }
+  .pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 5px 11px; border-radius: 980px; white-space: nowrap; background: rgba(255,255,255,0.06); color: var(--grey); }
+  .pill.s4 { color: var(--green); background: rgba(48,209,88,0.12); }
+  .pill.s3 { color: var(--blue); background: rgba(41,151,255,0.12); }
+
+  /* watch */
+  .watch { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .watch-card { background: var(--panel); border-radius: var(--r); padding: 24px; }
+  .watch-card .amt { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .watch-card .acc { font-size: 15px; margin-top: 10px; }
+  .watch-card .op { color: var(--grey); font-size: 13px; margin-top: 3px; line-height: 1.4; }
+  .subhead { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 24px; }
+
+  /* ============ C&C ============ */
+  .cc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cc-card { background: var(--panel); border-radius: var(--r); padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+  .cc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .cc-acc { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  .cc-amt { color: var(--blue); font-weight: 600; font-size: 16px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .cc-op { color: var(--grey); font-size: 14px; line-height: 1.45; }
+  .cc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 6px; }
+  .tag { font-size: 12px; padding: 5px 11px; border-radius: 980px; background: rgba(255,255,255,0.06); color: var(--grey); }
+  .tag.play { background: rgba(41,151,255,0.12); color: var(--blue); }
+
+  /* ============ CONSO ============ */
+  .conso { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .conso-card { background: var(--panel); border-radius: var(--r); padding: 30px; }
+  .conso-card.warn { box-shadow: inset 0 0 0 1px rgba(255,159,10,0.35); }
+  .conso-acc { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .conso-nums { display: flex; gap: 26px; margin-bottom: 18px; }
+  .conso-nums .k { color: var(--grey); font-size: 12px; }
+  .conso-nums .v { font-size: 18px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .conso-status { font-size: 14px; color: var(--grey); line-height: 1.4; }
+  .conso-card.warn .conso-status { color: var(--amber); }
+  .callout { background: var(--panel); border-radius: var(--r-lg); padding: 36px 40px; box-shadow: inset 0 0 0 1px rgba(255,159,10,0.25); }
+  .callout .lbl { color: var(--amber); font-size: 13px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 14px; }
+  .callout p { color: var(--grey); font-size: 16px; line-height: 1.55; }
+  .callout p + p { margin-top: 12px; }
+  .callout b { color: var(--white); font-weight: 600; }
+
+  /* ============ RISKS + ASKS ============ */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .block-title { font-size: 15px; font-weight: 600; letter-spacing: 0.01em; text-transform: uppercase; color: var(--grey); margin-bottom: 28px; display: flex; align-items: center; gap: 10px; }
+  .block-title .d { width: 9px; height: 9px; border-radius: 50%; }
+  .stack .item { display: flex; gap: 18px; align-items: flex-start; padding: 18px 0; border-top: 1px solid var(--hair-soft); font-size: 16px; line-height: 1.5; }
+  .stack .item:first-child { border-top: none; }
+  .stack .n { font-size: 15px; font-variant-numeric: tabular-nums; color: var(--grey-2); flex: none; min-width: 26px; padding-top: 2px; font-weight: 500; }
+  .asks .item { color: var(--white); } .asks .n { color: var(--blue); }
+  .risks .item { color: var(--grey); }
+
+  /* ============ FOOTER ============ */
+  footer { padding: 60px 0 80px; border-top: 1px solid var(--hair-soft); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+  footer .brand { font-size: 15px; font-weight: 600; }
+  footer .meta { color: var(--grey-2); font-size: 13px; }
+
+  .legend { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 26px; }
+  .legend span { display: inline-flex; align-items: center; gap: 9px; color: var(--grey); font-size: 14px; }
+  .legend i { width: 9px; height: 9px; border-radius: 50%; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px) {
+    .bets, .split, .cc, .conso { grid-template-columns: 1fr; }
+    .figrow { grid-template-columns: 1fr 1fr; gap: 1px; }
+    .fig { border-right: none; border-bottom: 1px solid var(--hair); padding: 26px 16px; }
+    .watch { grid-template-columns: 1fr 1fr; }
+    .adopt-row { grid-template-columns: 1fr; gap: 20px; }
+    .nav-links { display: none; }
+    .split { gap: 40px; }
+    .hero { gap: 48px; }
+    .hero-visual { aspect-ratio: 4 / 5; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 20px; }
+    section { padding: 88px 0; }
+    .bet { padding: 28px; }
+    .figrow { grid-template-columns: 1fr; }
+    .watch { grid-template-columns: 1fr; }
+    .panel { overflow-x: auto; }
+    table { min-width: 620px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 0.001s !important; animation-duration: 0.001s !important; scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; filter: none; }
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- ===== GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-eyebrow">ACO Big Bets</div>
+    <h1>Road to success<br>FY27 H2</h1>
+    <form id="gateForm" autocomplete="off">
+      <input class="gate-input" id="pw" type="password" placeholder="Mot de passe" aria-label="Mot de passe" />
+      <button class="gate-btn" type="submit">Déverrouiller</button>
+      <div class="gate-err" id="err">Mot de passe incorrect</div>
+    </form>
+    <div class="gate-hint">Document confidentiel · usage interne</div>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <div class="wrap">
+    <div class="nav-brand">Road to success <span class="glyph">· FY27 H2</span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#quota">Quota</a>
+      <a href="#bets">6 Bets</a>
+      <a href="#lvmh">Adoption LVMH</a>
+      <a href="#pipe">Pipe</a>
+      <a href="#cc">Create &amp; Close</a>
+      <a href="#conso">Conso</a>
+      <a href="#risks">Risques</a>
+    </div>
+  </div>
+</nav>
+
+<main id="app" aria-hidden="true"></main>
+
+<script>
+const DATA = {
+  hero: { title: "FY27 H2 - ACO Big Bets", subtitle: "6 bets pour transformer l'ambition agentique en signatures", context: "Sur les 6 bets, le use case est validé côté métier. Ce qui reste à sécuriser au H2 : la gouvernance et le sponsorship pour passer en signature.", fullQuota: "6.5 m EUR ACV", afQuota: "4.225 m EUR ACV", realizedH1: "1.8 m EUR", remainingToAf: "2.45 m EUR", remainingToFull: "4.7 m EUR" },
+  quotaTiles: [
+    { v: 6.5, u: "m€", k: "Full quota ACV" },
+    { v: 4.225, u: "m€", k: "Quota AF ACV", accent: true },
+    { v: 1.8, u: "m€", k: "Réalisé H1" },
+    { v: 2.45, u: "m€", k: "Reste quota AF" },
+    { v: 4.7, u: "m€", k: "Reste full cible" }
+  ],
+  bets: [
+    { name: "Roullier", entity: "Roullier / TIMAC Agro", useCase: "Agentforce for Sales (CG A1E) : visit prep voice-driven, purchase-intent capture, admin skill managers, orchestration multi-agents.", stage: "Aucune oppty active · à recréer", amount: "-", closeDate: "-", iacvTarget: "~500k€", orgStatus: "Ancienne oppty Timac marquée Dead / Duplicate.", context: "Renew Sales Cloud fait en mai (1,2 m€, 5000 licences). Vrai sujet H2 : le système d'engagement field + managers.", actions: ["Recréer une oppty propre dans Org62", "Répondre au RFI Mobilité ATC (18/09)", "SIC DF26 (16/09) + démo vision Agentforce Sales en octobre", "Vis-ma-vie terrain Irlande (semaine du 7)"], redFlags: ["Pas d'oppty active = visibilité pipe nulle pour le management", "Besoin d'un slot SE dédié pour la démo vision d'octobre"], progressPct: 10, signalColor: "red", pill: { label: "À créer", c: "red" } },
+    { name: "LVMH", entity: "LVMH · renew Core", useCase: "Renew Core agentifié : Clienteling / Sales Coach V2 (voice) & Service Coach V1, Agentic Commerce (reco, personal shopper, CuCare).", stage: "Pas d'oppty · renew Core", amount: "-", closeDate: "Janv. 2027", iacvTarget: "1.5 m€", orgStatus: "Commerce Cloud déjà signé Q1 (95 m$, 5 ans).", context: "Renew Core janvier 2027, AOV total 50 m€. Discussions sécurité en cours sur le volet CC & Service Coach.", actions: ["Sécuriser une DSR + oppty de renew propre", "Roadshow marques + demand plan (campfires par maturité)", "Suivre le pricing WhatsApp outbound Meta avant le 1er octobre"], redFlags: ["Concerns sécurité en discussion légale", "Volet Clienteling / Sales Coach V2 encore à structurer"], progressPct: 10, signalColor: "amber", pill: { label: "À créer", c: "red" } },
+    { name: "Mousquetaires", entity: "Les Mousquetaires / Intermarché", useCase: "RFI/RFP plateforme agentique (build, host, run, govern) + expansion de l'agent Aramis.", stage: "03 · Validating Benefits", amount: "500k€", closeDate: "29 janv. 2027", iacvTarget: "~750k€", orgStatus: "Oppty RFI IA active (931k$) ; Intermarché KYC en 04-Confirming (20k).", context: "RFP en cours, restitution RFI le 09/10. Conso : allowance 7,7M, 230k FC/mois, fin d'entitlement 31/12/2026.", actions: ["Win RFP", "Repitcher la valeur au CIO/CDO (IT pro-Google)", "Anticiper la fin d'entitlement Flex Credits 31/12 (renew AELA, J. Hunkeler)"], redFlags: ["IT challenger pro-Google, même sur du scope Salesforce", "Fin d'entitlement FC 31/12 = risque de coupure de conso"], progressPct: 50, signalColor: "amber" },
+    { name: "Coop U", entity: "Coop U · Système U", useCase: "E-commerce agentique (Storefront Next + Cimulate + Agentforce Shopper), service prédictif 24/7, Field Ops & headless magasins.", stage: "03 · Validating Benefits", amount: "400k$", closeDate: "27 nov. 2026", iacvTarget: "300k€+", orgStatus: "Parcours E-Com & Service (Ambition), Stage 3, 400k$.", context: "SIC 30/06 très réussi (11 participants, 4 Comex). Trust rétabli DSI, valeur validée. Proposition contractuelle fin d'année, deal Q4 en vue.", actions: ["Co-construire le business case avec PS", "Valider la trajectoire 2.5 m€ auprès du Comex", "Suivre la proposition contractuelle", "Capitaliser sur les démos Storefront Next / Shopper / Service"], redFlags: ["Décision liée à l'alignement Comex sur la trajectoire 2,5 Mds€ e-com 2030", "Fenêtre Q4 à sécuriser"], progressPct: 50, signalColor: "green" },
+    { name: "Chanel", entity: "Chanel", useCase: "Extension footprint : Sales Coach, Agent Voice Clienteling, Background Agent proactif, orchestration multi-agents avec l'IT.", stage: "03 · Validating Benefits", amount: "525k$", closeDate: "25 janv. 2027", iacvTarget: "100-500k€", orgStatus: "Agentic Acceleration AF/DC #Ambition, Stage 3, 525k$.", context: "Phase 1 proche go-live, POC multiagents en octobre, Phase 2 Store Agent en prototypage. 2 meetings exec fin août/sept.", actions: ["Relancer le Meeting Global Inno", "Partager les assets Sales Coach V2", "Suivre l'atelier orchestration (AF / Mulesoft / Agent MS), go-live octobre", "Engager le CDIO EMEA ; travailler APAC/AMER"], redFlags: ["Global Inno avance plus vite sur le multiagent = risque de dépassement sur le narratif"], progressPct: 50, signalColor: "amber" },
+    { name: "Royal Canin EOS Phase 2", entity: "Royal Canin · Mars", useCase: "Scale de l'EOS (visit prep, order taking) + extension multi-pays EU.", stage: "04 · Confirming Value", amount: "900k€", closeDate: "26 janv. 2027", iacvTarget: "900k€", orgStatus: "RC - EOS - AI - AELA, Stage 4, 900k€.", context: "AI Consumption Workshop avec le DT Maxime Chauvet en prép. FDEs mobilisés quotidiennement sur l'UC Visit Prep.", actions: ["Deal shaping (1re présentation cliente faite)", "Chiffrage 4 UC : visit prep, visit summary, Coworker, Automated Order Taking", "Valider Order Taking (inclusion roadmap PS)", "Scaler sur les autres pays EU"], redFlags: ["Manque de gouvernance client claire", "Roadmap AF4CG à préciser côté produit"], progressPct: 70, signalColor: "green" }
+  ],
+  lvmhAdoption: [
+    { useCase: "Case Analysis", deployJun: 1300, deployDec: 2320, advisorsStart: "36% · 20 maisons", advisorsEnd: "62% · 25 maisons", adoptionStartPct: 55, adoptionEndPct: 72, note: "Croissance forte du déploiement et de l'adoption." },
+    { useCase: "Writing Assistant", deployJun: 20, deployDec: 530, advisorsStart: "1% · 2 maisons", advisorsEnd: "15% · 7 maisons", adoptionStartPct: 75, adoptionEndPct: 75, note: "Déploiement x26 ; adoption déjà élevée et stable." },
+    { useCase: "Knowledge Search Agent", deployJun: 40, deployDec: 550, advisorsStart: "1% · 2 maisons", advisorsEnd: "15% · 4 maisons", adoptionStartPct: 65, adoptionEndPct: 65, note: "Scale rapide du déploiement ; adoption stable." }
+  ],
+  fullPipe: [
+    { account: "Royal Canin (Mars)", oppty: "RC - EOS - AI - AELA", stage: "04 - Confirming Value With Power", amount: "1 048 179 $", closeDate: "13 janv.", nextStep: "Quantifier l'UC, démarrer les discussions AELA, appui Dreamforce." },
+    { account: "Mousquetaires", oppty: "Mousquetaires - RFI IA", stage: "03 - Validating Benefits & Value", amount: "931 715 $", closeDate: "29 janv.", nextStep: "Restitution RFI IA le 09/10 ; SIC business + CxO G. Lesouef." },
+    { account: "Bel (Unibel)", oppty: "BEL - AF for Sales (OOH, Retail, GMS)", stage: "04 - Confirming Value With Power", amount: "780 311 $", closeDate: "15 janv.", nextStep: "S'appuyer sur le pilote AF for Service pour étendre à Sales." },
+    { account: "Roullier (Timac)", oppty: "Timac - Sales Efficiency - AF Sales + D360", stage: "04 - Confirming Value With Power", amount: "648 706 $", closeDate: "15 janv.", nextStep: "Le pilote doit démontrer l'impact AF avant déploiement 5000 users." },
+    { account: "Pernod Ricard", oppty: "PL - AF for Operation (Regrello)", stage: "02 - Determining Problem", amount: "582 322 $", closeDate: "29 janv.", nextStep: "Pas de nouvelles depuis 16/07, prochaine étape en octobre." },
+    { account: "Royal Canin - Upside", oppty: "RC - EOS - AI - AELA - Upside", stage: "04 - Confirming Value With Power", amount: "582 322 $", closeDate: "26 janv.", nextStep: "Démarrage des discussions AELA, appui Dreamforce." },
+    { account: "Chanel", oppty: "Agentic Acceleration - AF/DC #Ambition", stage: "02 - Determining Problem", amount: "525 000 $", closeDate: "30 déc.", nextStep: "Stream hebdo AI EU, POC KO Clienteling & W&FJ mi-septembre." },
+    { account: "Carrefour Hyper.", oppty: "CRF-RFP-CDP", stage: "02 - Determining Problem", amount: "500 000 $", closeDate: "27 nov.", nextStep: "Contribuer au RFP avec la Core Team, réponse le 7 septembre." },
+    { account: "Coop U", oppty: "Parcours E-Com & Service (Ambition)", stage: "03 - Validating Benefits & Value", amount: "442 564 $", closeDate: "11 déc.", nextStep: "Intégrer le Commerce Agentic à la modernisation CSG (Phase 2)." },
+    { account: "Kering", oppty: "Ambition AF Agent FAQ All-brands", stage: "04 - Confirming Value With Power", amount: "349 393 $", closeDate: "29 janv.", nextStep: "Go-live mi-septembre ; corrections de bugs en cours." },
+    { account: "Longchamp", oppty: "Longchamp - Data 360 (BDR)", stage: "04 - Confirming Value With Power", amount: "221 282 $", closeDate: "11 janv.", nextStep: "Débrief de juillet à venir ; démo faite le 29/06." }
+  ],
+  watchList: [
+    { account: "Bel", oppty: "AF for Service Ambition", amount: "192 399 $" },
+    { account: "Danone", oppty: "SEED - Agentic Use Case CG", amount: "174 696 $" },
+    { account: "L'Oréal", oppty: "Agentic FY27", amount: "154 000 $" },
+    { account: "Danone", oppty: "AF Operations (Regrello)", amount: "116 464 $" },
+    { account: "Danone", oppty: "SEED KAM Child #Dreamforce", amount: "104 818 $" }
+  ],
+  createClose: [
+    { account: "L'Oréal", oppty: "Agentic FY27 + CSI FY27 + Travel Retail Credits", amount: "~244k$", play: "AELA Play (consolidation)", keyProduct: "Piper (Qualified)" },
+    { account: "Bel (Unibel)", oppty: "AF for Service (Ambition)", amount: "192k$", play: "Agent-first Service Leader", keyProduct: "Momentum" },
+    { account: "Courir", oppty: "Voice #PL (50k) + Service WTP25 (110k)", amount: "~160k$", play: "Agent-first Service Leader", keyProduct: "Momentum" },
+    { account: "Peaksys", oppty: "Agentforce Roll Out FY27", amount: "116k$", play: "Grid / A2A Expansion", keyProduct: "Grid" },
+    { account: "Kering", oppty: "Kering SA - Cimulate", amount: "58k$", play: "AF for Industries (Retail)", keyProduct: "Cimulate → Shopper Agent" },
+    { account: "Tapis Saint-Maclou", oppty: "Tapis Saint-Maclou - Agentforce", amount: "15k$", play: "Bots-to-Agentforce Migration", keyProduct: "Fin (radar)" }
+  ],
+  consumption: [
+    { account: "Mousquetaires", allowance: "7,7M", usage: "1M", monthly: "230k FC", pct: 13, status: "Fin d'entitlement 31/12/2026, FAQ Agent en croissance", warn: true },
+    { account: "Picard", allowance: "44M", usage: "1M", monthly: "80k FC", pct: 3, status: "FAQ Agent, stable", warn: false },
+    { account: "Courir", allowance: "324M", usage: "315k", monthly: "300k FC (growing)", pct: 1, status: "Service Agent, en croissance", warn: false }
+  ],
+  transverseRisks: [
+    "Org hygiene : 2/6 bets (Roullier, LVMH) sans oppty active dans Org62 = visibilité pipe faussée pour les AVP/RVP.",
+    "Compete : IT pro-Google chez Mousquetaires ; multiagents Global Inno qui accélère plus vite que nous chez Chanel.",
+    "Fin d'entitlement conso : Mousquetaires Flex Credits 31/12/2026 = risque de rupture de service si non anticipé.",
+    "Gouvernance client : Royal Canin manque de gouvernance claire + roadmap AF4CG à préciser.",
+    "Timing exécutif : Coop U & Chanel dépendent de validations Comex/exec dans les prochaines semaines, fenêtre Q4 à ne pas rater."
+  ],
+  mainAsks: [
+    "Org hygiene & création d'opportunités réalistes sur Roullier & LVMH dans Org62.",
+    "Investissement SE dédié pour nourrir le demand plan mensuel (LVMH, Roullier vis-ma-vie, Chanel orchestration).",
+    "Plan de continuité conso Mousquetaires avant le 31/12.",
+    "Implication Competitive Intelligence pour muscler le narratif vs Google (Chanel, Mousquetaires)."
+  ]
+};
+
+const SIG_LABEL = { green: "Momentum", amber: "À sécuriser", red: "À créer" };
+function stageClass(s) { if (/^0?4/.test(s) || /Confirming/i.test(s)) return "s4"; if (/^0?3/.test(s) || /Validating/i.test(s)) return "s3"; return ""; }
+
+/* Bloc vidéo pleine largeur réutilisable (hero + adoption LVMH).
+   sound="first" : son sur la 1re boucle puis coupé ; sound="off" : muet par défaut. */
+function videoHero(src, sound) {
+  return `
+      <div class="hero-visual video-hero reveal" data-sound="${sound}">
+        <video class="hv-video" autoplay muted playsinline preload="auto"${sound === "off" ? " loop" : ""}>
+          <source src="${src}" type="video/mp4">
+        </video>
+        <div class="hero-controls">
+          <button class="hc-btn hc-play" type="button" aria-label="Lecture / Pause">
+            <svg class="ic-pause" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            <svg class="ic-play" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="hc-btn hc-sound" type="button" aria-label="Activer / couper le son">
+            <svg class="ic-soundon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a4 4 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.8 6a7 7 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg class="ic-soundoff" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="display:none"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>`;
+}
+
+function render() {
+  const d = DATA;
+  const heroPct = Math.round((1.8 / 4.225) * 100);
+
+  const figs = d.quotaTiles.map(t =>
+    `<div class="fig ${t.accent ? 'accent' : ''}"><div class="v"><span class="cnt" data-target="${t.v}" data-dec="${(t.v % 1 !== 0) ? String(t.v).split('.')[1].length : 0}">0</span><span class="u">${t.u}</span></div><div class="k">${t.k}</div></div>`
+  ).join("");
+
+  const bets = d.bets.map((b, i) => `
+    <article class="bet reveal" style="transition-delay:${(i % 2) * 0.08}s">
+      <div class="bet-top">
+        <div><div class="bet-name">${b.name}</div><div class="bet-entity">${b.entity}</div></div>
+        ${b.pill ? `<div class="sig" data-c="${b.pill.c}"><span class="dot"></span>${b.pill.label}</div>` : ""}
+      </div>
+      <p class="bet-uc">${b.useCase}</p>
+      <div class="bet-prog">
+        <div class="head"><span>Maturité du deal</span><b>${b.stage}</b></div>
+        <div class="pbar" data-c="${b.signalColor}"><i data-w="${b.progressPct}"></i></div>
+      </div>
+      <div class="bet-figs">
+        <div class="cell big"><div class="k">iACV cible H2</div><div class="v">${b.iacvTarget}</div></div>
+        <div class="cell"><div class="k">Montant oppty</div><div class="v">${b.amount}</div></div>
+        <div class="cell"><div class="k">Close</div><div class="v">${b.closeDate}</div></div>
+      </div>
+      <div class="bet-block"><div class="lbl">Plan d'action</div><ul>${b.actions.map(a => `<li>${a}</li>`).join("")}</ul></div>
+      <div class="bet-block flags"><div class="lbl">Red flags &amp; asks</div><ul>${b.redFlags.map(f => `<li>${f}</li>`).join("")}</ul></div>
+    </article>`).join("");
+
+  const adopt = d.lvmhAdoption.map(a => `
+    <div class="adopt-row reveal">
+      <div><div class="adopt-uc">${a.useCase}</div><div class="adopt-note">${a.note}</div></div>
+      <div class="adopt-deploy">
+        <div class="adopt-cap">Déploiement · juin → déc.</div>
+        <div class="big"><span class="cnt" data-target="${a.deployDec}" data-dec="0">0</span></div>
+        <div class="from">depuis ${a.deployJun.toLocaleString('fr-FR')} conseillers</div>
+      </div>
+      <div class="adopt-adopt">
+        <div class="cap-row"><span class="adopt-cap" style="margin:0">Taux d'adoption</span><b>${a.adoptionStartPct}% → ${a.adoptionEndPct}%</b></div>
+        <div class="lbar"><i data-w="${a.adoptionEndPct}"></i></div>
+        <div class="adopt-advisors">Conseillers actifs : ${a.advisorsStart} → ${a.advisorsEnd}</div>
+      </div>
+    </div>`).join("");
+
+  const pipeRows = d.fullPipe.map(p => `
+    <tr>
+      <td><div class="acc">${p.account}</div><div class="sub">${p.oppty}</div></td>
+      <td><span class="pill ${stageClass(p.stage)}">${p.stage.replace(/ - /g, ' · ')}</span></td>
+      <td class="amt">${p.amount}</td>
+      <td class="amt grey" style="color:var(--grey)">${p.closeDate}</td>
+      <td><div class="next">${p.nextStep}</div></td>
+    </tr>`).join("");
+
+  const watch = d.watchList.map(w => `
+    <div class="watch-card reveal"><div class="amt">${w.amount}</div><div class="acc">${w.account}</div><div class="op">${w.oppty}</div></div>`).join("");
+
+  const cc = d.createClose.map((c, i) => `
+    <div class="cc-card reveal" style="transition-delay:${(i % 3) * 0.06}s">
+      <div class="cc-head"><span class="cc-acc">${c.account}</span><span class="cc-amt">${c.amount}</span></div>
+      <div class="cc-op">${c.oppty}</div>
+      <div class="cc-tags"><span class="tag play">${c.play}</span><span class="tag">${c.keyProduct}</span></div>
+    </div>`).join("");
+
+  const conso = d.consumption.map(c => `
+    <div class="conso-card ${c.warn ? 'warn' : ''} reveal">
+      <div class="conso-acc">${c.account}</div>
+      <div class="conso-nums">
+        <div><div class="k">Allowance</div><div class="v">${c.allowance}</div></div>
+        <div><div class="k">Usage</div><div class="v">${c.usage}</div></div>
+        <div><div class="k">Conso / mois</div><div class="v">${c.monthly}</div></div>
+      </div>
+      <div class="pbar" data-c="${c.warn ? 'amber' : 'green'}" style="margin-bottom:16px"><i data-w="${c.pct}"></i></div>
+      <div class="conso-status">${c.status}</div>
+    </div>`).join("");
+
+  const risks = d.transverseRisks.map((r, i) => `<div class="item"><span class="n">${String(i + 1).padStart(2, '0')}</span><span>${r}</span></div>`).join("");
+  const asks = d.mainAsks.map((a, i) => `<div class="item"><span class="n">${String(i + 1).padStart(2, '0')}</span><span>${a}</span></div>`).join("");
+
+  document.getElementById("app").innerHTML = `
+    <section class="hero" id="top">
+      ${videoHero("assets/hero.mp4", "first")}
+      <div class="wrap">
+        <h1 class="reveal" style="transition-delay:.05s">H2 : <span class="grad">Execute, execute, execute.</span></h1>
+      </div>
+    </section>
+
+    <section id="quota">
+      <div class="wrap center narrow">
+        <div class="reveal huge"><span class="cnt" data-target="${heroPct}" data-dec="0">0</span><span class="pct">%</span></div>
+        <p class="lede grey reveal" style="transition-delay:.05s">déjà réalisé au H1.</p>
+        <div class="quota-line reveal" style="transition-delay:.1s">
+          <div class="qbar-track"><div class="qbar-fill" data-w="${heroPct}"></div></div>
+          <div class="qbar-legend"><span>1.8 m€ réalisé</span><span>Reste 2.45 m€ (AF) · 4.7 m€ (full)</span></div>
+        </div>
+      </div>
+      <div class="wrap"><div class="figrow reveal">${figs}</div></div>
+    </section>
+
+    <section id="bets">
+      <div class="wrap">
+        <div class="chapter-head center narrow">
+          <div class="eyebrow reveal">Situation par compte</div>
+          <h2 class="big reveal" style="transition-delay:.05s">Les 6 bets du semestre.</h2>
+          <p class="lede grey reveal" style="transition-delay:.1s">Le use case est validé côté métier partout. La barre indique l'avancement de chaque deal vers la signature.</p>
+        </div>
+        <div class="bets">${bets}</div>
+      </div>
+    </section>
+
+    <section class="light" id="lvmh">
+      ${videoHero("assets/adoption.mp4", "off")}
+      <div class="wrap">
+        <div class="chapter-head center narrow">
+          <div class="eyebrow reveal">Preuve en production · LVMH</div>
+          <h2 class="big reveal" style="transition-delay:.05s">L'adoption, déjà réelle.</h2>
+          <p class="lede grey reveal" style="transition-delay:.1s">Trois use cases agentiques suivis chez LVMH, de juin à décembre 2026. La traction terrain est le meilleur argument pour amorcer le renew Core.</p>
+        </div>
+        <div class="adopt reveal">${adopt}</div>
+      </div>
+    </section>
+
+    <section id="pipe">
+      <div class="wrap">
+        <div class="chapter-head center narrow">
+          <div class="eyebrow reveal">Pipe complet Org62</div>
+          <h2 class="big reveal" style="transition-delay:.05s">Au-delà des 6 bets.</h2>
+          <p class="lede grey reveal" style="transition-delay:.1s">Toutes les opportunités Agentforce supérieures à 200k€.</p>
+        </div>
+        <div class="panel reveal">
+          <table>
+            <thead><tr><th>Compte / Opportunité</th><th>Stage</th><th style="text-align:right">Montant</th><th style="text-align:right">Close</th><th>Next step</th></tr></thead>
+            <tbody>${pipeRows}</tbody>
+          </table>
+        </div>
+        <div class="center reveal" style="margin-top:72px"><div class="subhead">Watch list · 100 à 200k€</div></div>
+        <div class="watch">${watch}</div>
+      </div>
+    </section>
+
+    <section id="cc">
+      <div class="wrap">
+        <div class="chapter-head center narrow">
+          <div class="eyebrow reveal">Motion complémentaire · BCO</div>
+          <h2 class="big reveal" style="transition-delay:.05s">Create &amp; Close.</h2>
+          <p class="lede grey reveal" style="transition-delay:.1s">~785k$ de pipe additionnel sur les SKU Agentforce &lt; 200k€.</p>
+        </div>
+        <div class="cc">${cc}</div>
+      </div>
+    </section>
+
+    <section id="conso">
+      <div class="wrap">
+        <div class="chapter-head center narrow">
+          <div class="eyebrow reveal">Volet consommation</div>
+          <h2 class="big reveal" style="transition-delay:.05s">Continuité Flex Credits.</h2>
+          <p class="lede grey reveal" style="transition-delay:.1s">Priorité H2 : sécuriser l'enveloppe Mousquetaires avant le 31/12 pour ne pas casser la dynamique FAQ Agent.</p>
+        </div>
+        <div class="conso">${conso}</div>
+        <div class="callout reveal">
+          <div class="lbl">À creuser · conso réelle vs "fake"</div>
+          <p>Vérifier la <b>tendance de conso réelle vs "fake"</b> (cf. les biais identifiés côté L'Oréal liés au PSL unmetered IA) avant de bâtir le plan H2 définitif, et confirmer s'il existe un biais comparable sur un des 6 bets.</p>
+          <p>Caler un point dédié avec Juliette Hunkeler pour formaliser le plan de continuité (nouvelle enveloppe vs upsell) et anticiper un signal similaire sur <b>Royal Canin</b> (Consumption Workshop) et <b>Coop U</b> (montée en charge post-signature Q4).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <div class="wrap">
+        <div class="chapter-head center narrow">
+          <div class="eyebrow reveal">Synthèse pilotage</div>
+          <h2 class="big reveal" style="transition-delay:.05s">Risques &amp; asks.</h2>
+        </div>
+        <div class="split">
+          <div class="risks reveal">
+            <div class="block-title"><span class="d" style="background:var(--red)"></span>Risques transverses</div>
+            <div class="stack">${risks}</div>
+          </div>
+          <div class="asks reveal" style="transition-delay:.08s">
+            <div class="block-title"><span class="d" style="background:var(--blue)"></span>Main asks au management</div>
+            <div class="stack">${asks}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div class="brand">ACO Big Bets</div>
+        <div class="meta">FY27 H2 · Document confidentiel · XLENGELLE</div>
+      </div>
+    </footer>`;
+}
+
+/* ===== Animations ===== */
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function animateCount(el) {
+  const target = parseFloat(el.dataset.target);
+  const dec = parseInt(el.dataset.dec || "0", 10);
+  const fmt = v => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('fr-FR');
+  if (reduce) { el.textContent = fmt(target); return; }
+  const dur = 1400, start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(target * e);
+    if (p < 1) requestAnimationFrame(tick); else el.textContent = fmt(target);
+  }
+  requestAnimationFrame(tick);
+}
+
+function fillBars(scope) {
+  scope.querySelectorAll(".qbar-fill, .pbar > i, .lbar > i").forEach(b => { if (b.dataset.w) b.style.width = b.dataset.w + "%"; });
+}
+
+function initReveals() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const el = en.target;
+      el.classList.add("in");
+      el.querySelectorAll(".cnt").forEach(animateCount);
+      fillBars(el);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  // bars living inside reveal-less containers still fill when their section shows
+  const io2 = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { fillBars(en.target); en.target.querySelectorAll(".cnt").forEach(animateCount); io2.unobserve(en.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll("section").forEach(s => io2.observe(s));
+}
+
+function initScrollSpy() {
+  const links = [...document.querySelectorAll(".nav-links a")];
+  const map = links.map(a => ({ a, sec: document.querySelector(a.getAttribute("href")) })).filter(x => x.sec);
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { links.forEach(l => l.classList.remove("active")); const m = map.find(x => x.sec === en.target); if (m) m.a.classList.add("active"); }
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  map.forEach(x => spy.observe(x.sec));
+}
+
+function initVideo(container) {
+  const v = container.querySelector(".hv-video");
+  if (!v) return;
+  const btnPlay = container.querySelector(".hc-play");
+  const btnSound = container.querySelector(".hc-sound");
+  const icPause = btnPlay.querySelector(".ic-pause");
+  const icPlay = btnPlay.querySelector(".ic-play");
+  const icOn = btnSound.querySelector(".ic-soundon");
+  const icOff = btnSound.querySelector(".ic-soundoff");
+
+  const syncPlay = () => {
+    const playing = !v.paused && !v.ended;
+    icPause.style.display = playing ? "" : "none";
+    icPlay.style.display = playing ? "none" : "";
+  };
+  const syncSound = () => {
+    icOn.style.display = v.muted ? "none" : "";
+    icOff.style.display = v.muted ? "" : "none";
+  };
+
+  if (container.dataset.sound === "first") {
+    // Son sur la première boucle (autorisé si le déverrouillage vient d'un clic),
+    // sinon repli propre en muet si le navigateur bloque l'autoplay sonore.
+    v.muted = false; v.volume = 1;
+    const p = v.play();
+    if (p && p.catch) p.catch(() => { v.muted = true; v.play().catch(() => {}); syncSound(); });
+    // Fin de la 1re lecture : on coupe le son et on passe en boucle muette.
+    v.addEventListener("ended", () => {
+      v.muted = true; v.loop = true; v.currentTime = 0; v.play().catch(() => {}); syncSound();
+    }, { once: true });
+  } else {
+    // Muet par défaut, en boucle ; le son reste activable via le bouton.
+    v.muted = true; v.loop = true; v.play().catch(() => {});
+  }
+
+  btnPlay.addEventListener("click", () => { if (v.paused) v.play().catch(() => {}); else v.pause(); syncPlay(); });
+  btnSound.addEventListener("click", () => { v.muted = !v.muted; if (!v.muted) v.play().catch(() => {}); syncSound(); });
+  v.addEventListener("play", syncPlay);
+  v.addEventListener("pause", syncPlay);
+  v.addEventListener("volumechange", syncSound);
+
+  syncPlay(); syncSound();
+}
+
+function initVideos() { document.querySelectorAll(".video-hero").forEach(initVideo); }
+
+function boot() {
+  render();
+  document.getElementById("nav").classList.add("show");
+  document.getElementById("app").setAttribute("aria-hidden", "false");
+  requestAnimationFrame(() => { initReveals(); initScrollSpy(); initVideos(); });
+}
+
+/* ===== Gate ===== */
+const PW = "salesforce1!";
+const gate = document.getElementById("gate");
+const form = document.getElementById("gateForm");
+const pw = document.getElementById("pw");
+const err = document.getElementById("err");
+
+function unlock() { gate.classList.add("open"); document.body.classList.remove("locked"); try { sessionStorage.setItem("aco_ok", "1"); } catch (e) {} boot(); }
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (pw.value === PW) unlock();
+  else { err.classList.add("show"); pw.value = ""; pw.focus(); }
+});
+
+try {
+  if (sessionStorage.getItem("aco_ok") === "1") { gate.classList.add("open"); document.body.classList.remove("locked"); boot(); }
+  else setTimeout(() => pw.focus(), 500);
+} catch (e) { setTimeout(() => pw.focus(), 500); }
+</script>
+</body>
+</html>
